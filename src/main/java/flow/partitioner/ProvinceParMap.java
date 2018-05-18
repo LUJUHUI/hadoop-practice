@@ -18,6 +18,7 @@ public class ProvinceParMap extends Mapper<LongWritable, Text, FlowBean, NullWri
 		k.setDownFlow(Long.parseLong(lines[lines.length - 2]));
 		k.setSumFlow(Long.parseLong(lines[lines.length - 3])+Long.parseLong(lines[lines.length - 2]));
 
+		/*写出*/
 		context.write(k, NullWritable.get());
 	}
 }
