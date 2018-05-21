@@ -76,8 +76,6 @@ public class test {
 /*map导入，取得需要字段*/
 class testMap extends Mapper<LongWritable, Text, FlowBean1, NullWritable> {
 	FlowBean1 k = new FlowBean1();
-	Text v = new Text();
-
 	@Override
 	protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 		String[] lines = value.toString().split("\t");
