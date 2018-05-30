@@ -95,7 +95,7 @@ class TopNMapper extends Mapper<LongWritable, Text, CourseScore, NullWritable> {
  * */
 class TopNReducer extends Reducer<CourseScore, NullWritable, CourseScore, NullWritable> {
 	/*设定求topN*/
-	int topN = 2;
+	int topN = 1;
 
 	@Override
 	protected void reduce(CourseScore key, Iterable<NullWritable> values, Context context) throws IOException, InterruptedException {

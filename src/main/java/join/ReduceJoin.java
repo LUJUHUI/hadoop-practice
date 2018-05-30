@@ -48,7 +48,7 @@ public class ReduceJoin {
 		/*输入输出路径*/
 		Path inputMovie = new Path("/hadoop/input/movies.dat");
 		Path inputRating = new Path("/hadoop/input/ratings.dat");
-		Path output = new Path("/hadoop/output/movie1");
+		Path output = new Path("/hadoop/output/movieCount");
 		/*去除重复的文件夹*/
 		FileSystem fs = FileSystem.get(conf);
 		if (fs.exists(output)) {
@@ -76,18 +76,19 @@ class ReduceJoinMRMapper extends Mapper<LongWritable, Text, Text, Text> {
 		/*判断获取的文件切片是属于movies.dat文件还是ratings.dat文件的*/
 		String name = fileSplit.getPath().getName();
 		String[] splits = value.toString().split("::");
-			if (name.equals("movies.dat")) {
-				String movieID = splits[0];
-				String movieName = splits[1];
-				String movieType = splits[2];
-				context.write(new Text(movieID), new Text(name + "-" + movieName + "::" + movieType));
-			} else {
-				String userID = splits[0];
-				String movieID = splits[1];
-				String rate = splits[2];
-				String ts = splits[3];
-				context.write(new Text(movieID), new Text(name + "-" + userID + "::" + rate + "::" + ts));
-			}
+		if (name.equals("movies.dat")) {
+			String movieID = splits[0];
+			String movieName = splits[1];
+			String movieType = splits[2];
+			context.write(new Text(movieID), new Text(name + "-" + movieName + "::" + movieType));
+
+		} else {
+			String userID = splits[0];
+			String movieID = splits[1];
+			String rate = splits[2];
+			String ts = splits[3];
+			context.write(new Text(movieID), new Text(name + "-" + userID + "::" + rate + "::" + ts));
+		}
 	}
 }
 
@@ -107,9 +108,9 @@ class ReduceJoinMRReducer extends Reducer<Text, Text, Text, NullWritable> {
 
 		int movieLength = movieList.size();
 		int ratingLength = ratingList.size();
-		for(int i= 0;i<movieLength;i++){
-			for(int j = 0;j<ratingLength;j++){
-				String keyout = key.toString()+"::"+(ratingList.get(j)+"::"+movieList.get(i));
+		for (int i = 0; i < movieLength; i++) {
+			for (int j = 0; j < ratingLength; j++) {
+				String keyout = key.toString() + "::" + (ratingList.get(j) + "::" + movieList.get(i));
 				context.write(new Text(keyout), NullWritable.get());
 			}
 		}

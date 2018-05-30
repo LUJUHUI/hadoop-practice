@@ -29,7 +29,7 @@ public class CourseScoreMultiOutPutMR extends Configured implements Tool {
 		job.setJarByClass(CourseScoreMultiOutPutMR.class);
 
 		job.setMapperClass(CourseScoreMultiOutPutMRMapper.class);
-//		job.setReducerClass(CourseScoreMultiOutPutMRReducer.class);
+		job.setReducerClass(CourseScoreMultiOutPutMRReducer.class);
 
 		job.setNumReduceTasks(0);
 		job.setMapOutputKeyClass(Text.class);
